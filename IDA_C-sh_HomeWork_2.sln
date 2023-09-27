@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33414.496
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDA_C-sh_HomeWork_2", "IDA_C-sh_HomeWork_2\IDA_C-sh_HomeWork_2.csproj", "{5D96632D-B1EB-4EDF-8485-146EF8C646CA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5D96632D-B1EB-4EDF-8485-146EF8C646CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D96632D-B1EB-4EDF-8485-146EF8C646CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D96632D-B1EB-4EDF-8485-146EF8C646CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D96632D-B1EB-4EDF-8485-146EF8C646CA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8F1E5193-9122-40F6-9438-C8F2D7836CA9}
+	EndGlobalSection
+EndGlobal
