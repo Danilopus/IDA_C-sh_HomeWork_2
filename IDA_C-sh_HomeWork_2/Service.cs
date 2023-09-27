@@ -193,11 +193,16 @@ namespace Service
             num_2 = tmp;
         }
 
-        public static double Get_Random(double lower_bound = Double.MinValue, double upper_bound = Double.MaxValue)
+        public static double Get_Random(double upper_bound = Double.MaxValue, double lower_bound = 0)
         {
             Random rand_obj = new();
             if (lower_bound > upper_bound) swap(ref lower_bound, ref upper_bound);
-            return rand_obj.NextDouble()*(upper_bound- lower_bound) + lower_bound;           
+            return (rand_obj.NextDouble()*(upper_bound - lower_bound) + lower_bound);
+        }
+        public static double Get_Random()
+        {
+            Random rand_obj = new();
+            return (rand_obj.NextDouble() - 0.5) * Double.MaxValue;
         }
 
 

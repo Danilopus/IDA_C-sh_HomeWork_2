@@ -46,39 +46,45 @@ namespace IDA_C_sh_HomeWork
         {
             Console.WriteLine(work_name + "\n");
 
-            double[] A = new double[5];
+            int[] A = new int[5];
             for (int i = 0; i < A.Length; i++) 
             { 
-                Console.WriteLine("A["+i+"] -> ");
+                //Console.WriteLine("A["+i+"] -> ");
                 //A[i] = ServiceFunction.Get_Double();
-                A[i] = ServiceFunction.Get_Random();
+                A[i] = Convert.ToInt32(ServiceFunction.Get_Random(1000));
             }
 
             //int rows = 3, cols = 4;
             double[,] B = new double[3,4];
-            for (int i = 0; i < B.Length; i++)
+            //for (int i = 0; i < B.Length; i++)
+            
+            for (int i = 0; i <= B.GetUpperBound(0); i++)
             {
-                for (int ii = 0; ii < B.GetUpperBound(i); ii++)
-                    B[i, ii] = ServiceFunction.Get_Random();
+                // for (int ii = 0; ii < B.GetUpperBound(i); ii++)
+                for (int ii = 0; ii <= B.GetUpperBound(1); ii++)
+                    B[i, ii] = ServiceFunction.Get_Random(100);
             }
 
-            Console.WriteLine("Array A info:");
+            Console.WriteLine("\nArray A info:");
             foreach (var item in A) { Console.Write(item + " | "); }
             Console.Write("\nmax -> "+ max(A));
             Console.Write("\nmin -> " + min(A));
             Console.Write("\nsum -> " + sum(A));
             Console.Write("\nmult -> " + mult(A));
+            Console.Write("\nsum_if_even -> " + sum_if_even(A));
 
 
-
+            Console.WriteLine("\nArray B info:");
             foreach (var item in B) { Console.WriteLine(item); }
 
-           
-            for (int i = 0; i < B.Length; i++)
+
+
+            //for (int i = 0; i < B.Length; i++)
+            for (int i = 0; i < B.Rank; i++)
             {
                 for (int ii = 0; ii < B.GetUpperBound(i); ii++)
                      Console.Write(B[i, ii] + " | ");
-                Console.WriteLine("\b\b");
+                //Console.WriteLine("\b\b");
             }
 
 
@@ -103,15 +109,19 @@ namespace IDA_C_sh_HomeWork
             double sum(double[] x)
             {
                 double sum = 0;
-                foreach (var item in x)
+                try
                 {
-                    sum += item;
+                    foreach (var item in x)
+                    {
+                        sum += item;
+                    }
                 }
+                catch (Exception ex) { Console.WriteLine(ex.Message); }
                 return sum;
             }
             double mult(double[] x)
             {
-                double mult = 0;
+                double mult = 1;
                 try
                 {
                     foreach (var item in x)
@@ -122,6 +132,21 @@ namespace IDA_C_sh_HomeWork
                 catch (Exception ex) { Console.WriteLine(ex.Message); }
                 return mult;
             }
+            double sum_if_even(double[] x)
+            {
+                double sum = 0;
+                try
+                {
+                    foreach (var item in x)
+                    {
+                        if (item % 2 == 0) sum += item;
+                    }
+                }
+                catch (Exception ex) { Console.WriteLine(ex.Message); }
+                return sum;
+            }
+
+
 
 
             Console.Write("Number [1..100] -> ");
@@ -130,11 +155,11 @@ namespace IDA_C_sh_HomeWork
 
         }
         public static void Task_2(string work_name)
-        /*    Пользователь вводит с клавиатуры два числа.Первое
-      число — это значение, второе число процент, который
-      необходимо посчитать.Например, мы ввели с клавиатуры
-      90 и 10. Требуется вывести на экран 10 процентов от 90.
-      Результат: 9.*/
+        /*    Дан двумерный массив размерностью 5×5, заполнен-
+        ный случайными числами из диапазона от –100 до 100.
+        Определить сумму элементов массива, расположенных
+        между минимальным и максимальным элементами..
+        */
         {
             Console.WriteLine(work_name + "\n");
             Console.Write("Base -> ");

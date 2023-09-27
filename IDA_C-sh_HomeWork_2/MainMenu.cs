@@ -10,7 +10,7 @@ namespace MainMenu
     {
         List<string>? _menu_elements = new List<string>()
             { "HomeWork 01 : [Arrays & strings]",
-              "Task_1: FizzBuzz",
+              "Task_1: DIM & 2-DIM Arrays",
 
               "Task_2: Percentage",
               "Task_3: 4_Digits_to_Number",
@@ -44,14 +44,14 @@ namespace MainMenu
                 Console.Write("e!"); Thread.Sleep(850); return 0;
             }
 
-            else if (choice == 1) IDA_C_sh_HomeWork_1.Program.Task_1(_menu_elements[1]);
-            else if (choice == 2) IDA_C_sh_HomeWork_1.Program.Task_2(_menu_elements[2]);
-            else if (choice == 3) IDA_C_sh_HomeWork_1.Program.Task_3(_menu_elements[3]);
-            else if (choice == 4) IDA_C_sh_HomeWork_1.Program.Task_4(_menu_elements[4]);
-            else if (choice == 5) IDA_C_sh_HomeWork_1.Program.Task_5(_menu_elements[5]);
-            else if (choice == 6) IDA_C_sh_HomeWork_1.Program.Task_6(_menu_elements[6]);
-            else if (choice == 7) IDA_C_sh_HomeWork_1.Program.Task_7(_menu_elements[7]);
-            //else if (choice == 8) IDA_C_sh_HomeWork_1.Program.Task_8(_menu_elements[8]);
+            else if (choice == 1) IDA_C_sh_HomeWork.Program.Task_1(_menu_elements[1]);
+            else if (choice == 2) IDA_C_sh_HomeWork.Program.Task_2(_menu_elements[2]);
+            else if (choice == 3) IDA_C_sh_HomeWork.Program.Task_3(_menu_elements[3]);
+            else if (choice == 4) IDA_C_sh_HomeWork.Program.Task_4(_menu_elements[4]);
+            else if (choice == 5) IDA_C_sh_HomeWork.Program.Task_5(_menu_elements[5]);
+            else if (choice == 6) IDA_C_sh_HomeWork.Program.Task_6(_menu_elements[6]);
+            else if (choice == 7) IDA_C_sh_HomeWork.Program.Task_7(_menu_elements[7]);
+            //else if (choice == 8) IDA_C_sh_HomeWork.Program.Task_8(_menu_elements[8]);
 
 
             else { Console.Write("\nSuch choice does not exist yet\n"); Thread.Sleep(1000); }
