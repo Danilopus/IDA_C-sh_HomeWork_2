@@ -48,10 +48,10 @@ namespace IDA_C_sh_HomeWork
                         
             double[] A = new double[5];
             for (int i = 0; i < A.Length; i++) 
-            { 
-                //Console.WriteLine("A["+i+"] -> ");
-                //A[i] = ServiceFunction.Get_Double();
-                A[i] = Convert.ToInt32(ServiceFunction.Get_Random(1000));
+            {
+                Console.Write("A["+i+"] -> ");
+                A[i] = ServiceFunction.Get_Int();
+                //A[i] = Convert.ToInt32(ServiceFunction.Get_Random(1000));
             }
 
             double[,] B = new double[3,4];            
@@ -71,62 +71,14 @@ namespace IDA_C_sh_HomeWork
             Console.Write("\nsum_if_even -> " + sum_if_even(A));
 
 
-            Console.WriteLine("\nArray B info:");
-            foreach (var item in B) { Console.WriteLine(item); }
-
-
-            for (int i = 0; i < B.GetUpperBound(0); i++)
-            {
-                for (int ii = 0; ii < B.GetUpperBound(1); ii++)
-                     Console.Write(B[i, ii] + " | ");
-                Console.Write("\b\b \n");
-            }
-
-
-            double max (double[] x) 
-            {
-                double max = x[0];
-                foreach (var item in x)
-                {
-                    max = item > max ? item : max;
-                }
-                return max;
-            }
-            double min(double[] x)
-            {
-                double min = x[0];
-                foreach (var item in x)
-                {
-                    min = item < min ? item : min;
-                }
-                return min;
-            }
-            double sum(double[] x)
-            {
-                double sum = 0;
-                try
-                {
-                    foreach (var item in x)
-                    {
-                        sum += item;
-                    }
-                }
-                catch (Exception ex) { Console.WriteLine(ex.Message); }
-                return sum;
-            }
-            double mult(double[] x)
-            {
-                double mult = 1;
-                try
-                {
-                    foreach (var item in x)
-                    {
-                        mult *= item;
-                    }
-                }
-                catch (Exception ex) { Console.WriteLine(ex.Message); }
-                return mult;
-            }
+            Console.WriteLine("\n\nArray B info:");
+            ServiceFunction.Array_Console_Out(B);
+            Console.Write("max -> " + max(B));
+            Console.Write("\nmin -> " + min(B));
+            Console.Write("\nsum -> " + sum(B));
+            Console.Write("\nmult -> " + mult(B));
+            Console.Write("\nsum_of_odd_columns -> " + sum_of_odd_columns(B));
+                        
             double sum_if_even(double[] x)
             {
                 double sum = 0;
@@ -134,32 +86,55 @@ namespace IDA_C_sh_HomeWork
                 {
                     foreach (var item in x)
                     {
-                        if (item % 2 == 0) sum += item;
+                        if (Convert.ToInt32(item) % 2 == 0) sum += item;
+                    }
+                }
+                catch (Exception ex) { Console.WriteLine(ex.Message); }
+                return sum;
+            }
+            double sum_of_odd_columns(double[,] x)
+            {
+                double sum = 0;
+                try
+                {
+                    for (int i = 0; i < x.GetLength(0); i++)
+                    {
+                        for (int ii = 0; ii < x.GetLength(1); ii++)
+                        {                         
+                        if (ii % 2 != 0) sum += x[i,ii];
+                        }
                     }
                 }
                 catch (Exception ex) { Console.WriteLine(ex.Message); }
                 return sum;
             }
 
-
-
-
-            Console.Write("Number [1..100] -> ");
-
-
-
+            Console.Write("\n\n***");
+            Console.Write("\nCommon max  -> " + (max(A)>max(B) ? max(A) : max(B)));
+            Console.Write("\nCommon min  -> " + (min(A) < min(B) ? min(A) : min(B)));
+            Console.Write("\nCommon summ -> " + (sum(A) + sum(B)));
+            Console.Write("\nCommon mult -> " + (mult(A) * mult(B)));
         }
 
- /// Array service functions --------------------------- 
-        static double max (double[] x) 
+        /// Array service functions begin ------------------------- 
+        static double max(double[] x)
+        {
+            double max = x[0];
+            foreach (var item in x)
             {
-                double max = x[0];
-                foreach (var item in x)
-                {
-                    max = item > max? item : max;
-                }
-                return max;
+                max = item > max ? item : max;
             }
+            return max;
+        }
+        static double max(double[,] x)
+        {
+            double max = x[0, 0];
+            foreach (var item in x)
+            {
+                max = item > max ? item : max;
+            }
+            return max;
+        }
         // Проблема: неопределены операции над any. 
         //any max<any>(any[,] x)    Error CS0019  Operator '>' cannot be applied to operands of type 'any' and 'any'
         // Не знаю как это решить пока что - поэтому делаю просто перегрузки на нужные аргументы
@@ -172,7 +147,6 @@ namespace IDA_C_sh_HomeWork
             }
             return max;
         }
-
         static double min(double[] x)
         {
             double min = x[0];
@@ -191,7 +165,15 @@ namespace IDA_C_sh_HomeWork
             }
             return min;
         }
-
+        static double min(double[,] x)
+        {
+            double min = x[0, 0];
+            foreach (var item in x)
+            {
+                min = item < min ? item : min;
+            }
+            return min;
+        }
         static double sum(double[] x)
         {
             double sum = 0;
@@ -202,6 +184,20 @@ namespace IDA_C_sh_HomeWork
                     sum += item;
                 }
             }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+            return sum;
+        }
+        static double sum(double[,] x)
+        {
+            double sum = 0;
+            try
+            {
+                foreach (var item in x)
+                {
+                    sum += item;
+                }
+            }
+            // Возможно переполнение при суммировании
             catch (Exception ex) { Console.WriteLine(ex.Message); }
             return sum;
         }
@@ -232,7 +228,20 @@ namespace IDA_C_sh_HomeWork
             catch (Exception ex) { Console.WriteLine(ex.Message); }
             return mult;
         }
-/// Array service functions ---------------------------
+        static double mult(double[,] x)
+        {
+            double mult = 1;
+            try
+            {
+                foreach (var item in x)
+                {
+                    mult *= item;
+                }
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+            return mult;
+        }
+        /// Array service functions end ---------------------------
 
         public static void Task_2(string work_name)
         /*    Дан двумерный массив размерностью 5×5, заполнен-
@@ -634,8 +643,6 @@ namespace IDA_C_sh_HomeWork
 
             Console.WriteLine("\nresult:\n" + result);
             Console.WriteLine("\nstatistics: made "+appearance+" changes of word " + forbidden_word);
-
-
         }
 
     }// class Program

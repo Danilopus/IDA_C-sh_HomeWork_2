@@ -9,7 +9,7 @@ namespace MainMenu
     internal class MainMenu
     {
         List<string>? _menu_elements = new List<string>()
-            { "HomeWork 01 : [Arrays & strings]",
+            { "HomeWork 02 : [Arrays & strings]",
               "Task_1: DIM & 2-DIM Arrays",
 
               "Task_2: Summ of all elements of array between MIN and MAX",
