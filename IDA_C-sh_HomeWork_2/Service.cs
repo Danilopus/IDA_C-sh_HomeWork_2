@@ -204,7 +204,34 @@ namespace Service
             Random rand_obj = new();
             return (rand_obj.NextDouble() - 0.5) * Double.MaxValue;
         }
+        public static void Array_Fill_Random(ref double[,] matrix, double upper_bound = Double.MaxValue, double lower_bound = 0)
+        {
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (int ii = 0; ii < matrix.GetLength(1); ii++)
+                    matrix[i, ii] = ServiceFunction.Get_Random(upper_bound, lower_bound);
+            }
+        }
+        public static void Array_Fill_Random(ref double[,] matrix, Int64 upper_bound = Int64.MaxValue, double lower_bound = 0)
+        {
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (int ii = 0; ii < matrix.GetLength(1); ii++)
+                    matrix[i, ii] = Convert.ToInt64(ServiceFunction.Get_Random(upper_bound, lower_bound));
+            }
+        }
 
+        public static void Array_Console_Out(double[,] matrix)
+        {
+            // как вывести в консоль имя переменной-массива?
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (int ii = 0; ii < matrix.GetLength(1); ii++)
+                    Console.Write((matrix[i, ii] + " | ").ToString().PadLeft(10));
+            Console.Write("\b\b \n");
+            }
+
+        }
 
 
     } //    internal class ServiceFunction

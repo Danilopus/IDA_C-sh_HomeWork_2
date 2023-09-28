@@ -5,6 +5,7 @@ using System;
 using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Text;
+using System.Text.RegularExpressions;
 
 /// QUESTIONS ///
 /// 1. 
@@ -27,7 +28,6 @@ namespace IDA_C_sh_HomeWork
                 if (mainMenu.User_Choice_Handle() == 0) break;
                 Console.ReadKey();
             } while (true);
-            // Console.ReadKey();
         }
 
         public static void Task_1(string work_name)
@@ -45,8 +45,8 @@ namespace IDA_C_sh_HomeWork
         */
         {
             Console.WriteLine(work_name + "\n");
-
-            int[] A = new int[5];
+                        
+            double[] A = new double[5];
             for (int i = 0; i < A.Length; i++) 
             { 
                 //Console.WriteLine("A["+i+"] -> ");
@@ -54,10 +54,7 @@ namespace IDA_C_sh_HomeWork
                 A[i] = Convert.ToInt32(ServiceFunction.Get_Random(1000));
             }
 
-            //int rows = 3, cols = 4;
-            double[,] B = new double[3,4];
-            //for (int i = 0; i < B.Length; i++)
-            
+            double[,] B = new double[3,4];            
             for (int i = 0; i <= B.GetUpperBound(0); i++)
             {
                 // for (int ii = 0; ii < B.GetUpperBound(i); ii++)
@@ -78,13 +75,11 @@ namespace IDA_C_sh_HomeWork
             foreach (var item in B) { Console.WriteLine(item); }
 
 
-
-            //for (int i = 0; i < B.Length; i++)
-            for (int i = 0; i < B.Rank; i++)
+            for (int i = 0; i < B.GetUpperBound(0); i++)
             {
-                for (int ii = 0; ii < B.GetUpperBound(i); ii++)
+                for (int ii = 0; ii < B.GetUpperBound(1); ii++)
                      Console.Write(B[i, ii] + " | ");
-                //Console.WriteLine("\b\b");
+                Console.Write("\b\b \n");
             }
 
 
@@ -154,6 +149,91 @@ namespace IDA_C_sh_HomeWork
 
 
         }
+
+ /// Array service functions --------------------------- 
+        static double max (double[] x) 
+            {
+                double max = x[0];
+                foreach (var item in x)
+                {
+                    max = item > max? item : max;
+                }
+                return max;
+            }
+        // Проблема: неопределены операции над any. 
+        //any max<any>(any[,] x)    Error CS0019  Operator '>' cannot be applied to operands of type 'any' and 'any'
+        // Не знаю как это решить пока что - поэтому делаю просто перегрузки на нужные аргументы
+        static int max(int[,] x)
+        {
+            int max = x[0,0];
+            foreach (var item in x)
+            {
+                max = item > max ? item : max;
+            }
+            return max;
+        }
+
+        static double min(double[] x)
+        {
+            double min = x[0];
+            foreach (var item in x)
+            {
+                min = item < min ? item : min;
+            }
+            return min;
+        }
+        static int min(int[,] x)
+        {
+            int min = x[0,0];
+            foreach (var item in x)
+            {
+                min = item < min ? item : min;
+            }
+            return min;
+        }
+
+        static double sum(double[] x)
+        {
+            double sum = 0;
+            try
+            {
+                foreach (var item in x)
+                {
+                    sum += item;
+                }
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+            return sum;
+        }
+        static int sum(int[,] x)
+        {
+            int sum = 0;
+            try
+            {
+                foreach (var item in x)
+                {
+                    sum += item;
+                }
+            }
+           // Возможно переполнение при суммировании
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+            return sum;
+        }
+        static double mult(double[] x)
+        {
+            double mult = 1;
+            try
+            {
+                foreach (var item in x)
+                {
+                    mult *= item;
+                }
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+            return mult;
+        }
+/// Array service functions ---------------------------
+
         public static void Task_2(string work_name)
         /*    Дан двумерный массив размерностью 5×5, заполнен-
         ный случайными числами из диапазона от –100 до 100.
@@ -162,186 +242,400 @@ namespace IDA_C_sh_HomeWork
         */
         {
             Console.WriteLine(work_name + "\n");
-            Console.Write("Base -> ");
-            double? user_number_1 = ServiceFunction.Get_Double();
-            Console.Write("Percent -> ");
-            double? user_number_2 = ServiceFunction.Get_Double(0, Double.MaxValue, "percent only positive");
-            Console.WriteLine(user_number_1 + " * " + user_number_2 + "% = " + (user_number_1 / 100) * user_number_2);
+
+            int[,] B = new int[5, 5];
+
+            for (int i = 0; i <= B.GetUpperBound(0); i++)
+            {                
+                for (int ii = 0; ii <= B.GetUpperBound(1); ii++)
+                    B[i, ii] = Convert.ToInt32(ServiceFunction.Get_Random(100, -100));
+            }
+
+            for (int i = 0; i < B.GetUpperBound(0); i++)
+            {
+                for (int ii = 0; ii < B.GetUpperBound(1); ii++)
+                    Console.Write(B[i, ii] + " | ");
+                Console.Write("\b\b \n");
+            }
+
+            Console.WriteLine("Summ of all elements of array between MIN [" + min(B) + "] and MAX [" + max(B) + "] -> " + (sum(B) - max(B) - min(B)));
 
         }
         public static void Task_3(string work_name)
-        /*  Пользователь вводит с клавиатуры четыре цифры.
-        Необходимо создать число, содержащее эти цифры.На-
-        пример, если с клавиатуры введено 1, 5, 7, 8 тогда нужно
-        сформировать число 1578.*/
+        /*  Пользователь вводит строку с клавиатуры. 
+         *  Необходимо зашифровать данную строку используя шифр Цезаря.
+        */
         {
-            Console.WriteLine(work_name + "\n" + "\nEnter 4 digits:\n");
-            string tmp_str = new string("");
-            //string tmp_str;
-            for (int i = 0; i < 4; i++)
-            {
-                Console.Write("Digit [" + (i + 1) + "] -> ");
-                tmp_str += Convert.ToString(ServiceFunction.Get_Int(0, 9, "Error: digits [0..9]"));
+            Console.WriteLine(work_name + "\n");
+
+
+            string user_input_str = "«today is a good day for walking. i will try to walk near the sea».";
+
+            Console.Write("\nEnter a string -> " + user_input_str);
+
+            //string tmp_str = Console.ReadLine();
+            // string user_input_str = "«today is a good\rday for walking. i will try to walk near the sea».";
+
+
+            Ceaser_engine(Crypt_mode.crypt, 5, ref user_input_str);
+            Console.Write("\n\nCrypt with CEASER - > " +  user_input_str);
+
+            Ceaser_engine(Crypt_mode.decrypt, 5, ref user_input_str);
+            Console.Write("\n\nDecrypt with CEASER - > " + user_input_str); ;
+
+
+            string Ceaser_engine(Crypt_mode mode, int crypt_offset,  ref string original_str)
+            {     
+                if (mode == Crypt_mode.decrypt) crypt_offset = crypt_offset * (-1); 
+                char[] char_arr_tmp = new char[original_str.Length];
+                for (int i = 0; i < original_str.Length; i++)
+                {
+                    // Пробелы должны остаться где были
+                    if (original_str[i] == ' ')
+                    {
+                        char_arr_tmp[i] = ' ';
+                        continue;
+                    }
+                    char_arr_tmp[i] = Convert.ToChar(Convert.ToByte(original_str[i]) + crypt_offset);
+                }
+                original_str = new string(char_arr_tmp);
+                return original_str;
             }
-            Console.WriteLine("\nresult -> " + Convert.ToInt32(tmp_str));
+
         }
+        enum Crypt_mode { crypt, decrypt};
         public static void Task_4(string work_name)
-        /*  Пользователь вводит шестизначное число. После чего
-        пользователь вводит номера разрядов для обмена цифр.
-        Например, если пользователь ввёл один и шесть — это
-        значит, что надо обменять местами первую и шестую
-        цифры.
-        Число 723895 должно превратиться в 523897.
-        Если пользователь ввел не шестизначное число тре-
-        буется вывести сообщение об ошибке..*/
+        /*  Создайте приложение, которое производит операции
+        над матрицами:
+        ■ Умножение матрицы на число;
+        ■ Сложение матриц;
+        ■ Произведение матриц.
+        */
         {
-            Console.Write(work_name + "\n" + "\nEnter 6-digits number -> ");
-            int? user_number = ServiceFunction.Get_Int(Convert.ToInt32(1e5), Convert.ToInt32(1e6 - 1), "Error: range expected [6-digits]");
-            Console.Write("\nEnter number of digit_1 to change -> ");
-            int digits_to_change_1 = ServiceFunction.Get_Int(1, 6, "Error: range expected [1..6]");
-            Console.Write("\nEnter number of digit_2 to change -> ");
-            int digits_to_change_2 = ServiceFunction.Get_Int(1, 6, "Error: range expected [1..6]");
 
-            int[] digit_to_index_transform = new int[] { 0, 5, 4, 3, 2, 1, 0 };
-
-            if (digits_to_change_1 != digits_to_change_2)
+            ConsoleKeyInfo pressed_key;
+            do
             {
-                int index_to_change_1 = digit_to_index_transform[digits_to_change_1];
-                int index_to_change_2 = digit_to_index_transform[digits_to_change_2];
+                Console.Clear();
+                Console.WriteLine(work_name + "\n");
+                Console.WriteLine("\nAvailable operations:\n" +
+                    "1 - Koefficient multiply\n" +
+                    "2 - Summation\n" +
+                    "3 - Multiplication");
+                pressed_key = Console.ReadKey();        
 
-                user_number = Convert.ToInt32(ServiceFunction.Replace_Char_in_String(Convert.ToString(user_number), index_to_change_1, index_to_change_2));
+                switch (pressed_key.Key) 
+                {
+                    
+                    case ConsoleKey.D1:
+                    case ConsoleKey.NumPad1:
+                        {
+                            double[,] Operand_1 = matrix_init(1);
+                            if (Operand_1 == null) return;
+                            ServiceFunction.Array_Console_Out(Operand_1);
+                            ServiceFunction.Array_Console_Out(Matrix_koef_multiply_get_koef(Operand_1)); 
+                            break; 
+                        }
+                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
+                        {
+                            double[,] Operand_1 = matrix_init(1);
+                            if (Operand_1 == null) return;
+                            ServiceFunction.Array_Console_Out(Operand_1);
+                            double[,] Operand_2 = matrix_init(2);
+                            if (Operand_2 == null) return;
+                            ServiceFunction.Array_Console_Out(Operand_2);
+                            Console.WriteLine("\nmatrix_1 + matrix_2 = matrix_3:\n");
+                            ServiceFunction.Array_Console_Out(Matrix_summ(Operand_1, Operand_2));
+                            break;
+                        }
+                    case ConsoleKey.D3:
+                    case ConsoleKey.NumPad3:
+                        {
+                            double[,] Operand_1 = matrix_init(1);
+                            if (Operand_1 == null) return;
+                            ServiceFunction.Array_Console_Out(Operand_1);
+                            double[,] Operand_2 = matrix_init(2);
+                            if (Operand_2 == null) return;
+                            ServiceFunction.Array_Console_Out(Operand_2);
+                            Console.WriteLine("\nmatrix_1 * matrix_2 = matrix_4:\n");
+                            ServiceFunction.Array_Console_Out(Matrix_mult(Operand_1, Operand_2));
+                            break;
+                        }
+                    case ConsoleKey.Escape:
+                        {
+                            return;
+                        }
+
+                }
+              Console.ReadKey();
+            } while (true);
+
+
+            double[,] matrix_init(int num)
+                {
+                Console.WriteLine("\n\nmatrix_" + num + " initialisation:\n" +
+                       "1 - Full Random (dimensions & values)\n" +
+                       "2 - Manually dimensions / Values random\n" +
+                       "3 - Full Manually");
+                ConsoleKeyInfo pressed_key_2;
+                do
+                {                   
+                    pressed_key_2 = Console.ReadKey();
+                    Console.WriteLine();
+                    switch (pressed_key_2.Key)
+                    {
+                        case ConsoleKey.D1: case ConsoleKey.NumPad1: return FullRandom_matrix(); 
+                        case ConsoleKey.D2: case ConsoleKey.NumPad2: return Manually_dim_values_random_matrix();  
+                        case ConsoleKey.D3: case ConsoleKey.NumPad3: return FullManually_matrix();
+                        case ConsoleKey.Escape: return null;
+                        default: break;
+                    }
+                    Console.Write("\b");
+                } while (true);
+                //return new double[1, 1];
+                throw new Exception("\nMatrix initialiase failure");
+
             }
 
-            Console.WriteLine(user_number);
+            double[,] FullRandom_matrix()
+            {
+                double[,] tmp_matrix = new double[Convert.ToInt32(ServiceFunction.Get_Random(10, 2)), Convert.ToInt32(ServiceFunction.Get_Random(10,2))];
+                ServiceFunction.Array_Fill_Random(ref tmp_matrix, 100);
+                return tmp_matrix;
+            }
+            double[,] Manually_dim_values_random_matrix()
+            {
+                Console.Write("\nEnter matrix dimensions:\nRows - > ");
+                int rows = ServiceFunction.Get_Int(1, 20, "try in range [1..20]");
+                Console.Write("Columns - > ");
+                int columns = ServiceFunction.Get_Int(1, 20, "try in range [1..20]");
+                
+                double[,] tmp_matrix = new double[rows, columns];
+                ServiceFunction.Array_Fill_Random(ref tmp_matrix, 100);
+                return tmp_matrix;
+            }
+            double[,] FullManually_matrix()
+            {
+                Console.Write("\nEnter matrix dimensions:\nRows - > ");
+                int rows = ServiceFunction.Get_Int(1, 5, "try in range [1..5]");
+                Console.Write("\nColumns - > ");
+                int columns = ServiceFunction.Get_Int(1, 5, "try in range [1..5]");
+                double[,] tmp_matrix = new double[rows, columns];
+                for (int i = 0; i < tmp_matrix.GetLength(0); i++)
+                    for (int ii = 0; ii < tmp_matrix.GetLength(1); ii++)
+                    {
+                        Console.Write("element [" + i + "][" + ii + "] -> ");
+                        tmp_matrix[i, ii] = ServiceFunction.Get_Double();
+                    }
+
+                return tmp_matrix;
+            }
+
+
+        /*    double[,] matrix = new double[9, 9];
+            Console.WriteLine("\nmatrix_1:\n");
+            ServiceFunction.Array_Fill_Random(ref matrix, 100);
+            ServiceFunction.Array_Console_Out(matrix);*/
+
+     /*       double koef = 1.5;
+            Console.WriteLine("\nmatrix_1 * koef["+koef+"] = matrix_2:\n");
+            double[,] matrix_2 = Matrix_koef_multiply(matrix, koef);
+            ServiceFunction.Array_Console_Out(matrix_2);*/
+
+            /*double[,] matrix_2 = new double[9, 9];
+            Console.WriteLine("\nmatrix_2:\n");
+            ServiceFunction.Array_Fill_Random(ref matrix_2);
+            ServiceFunction.Array_Console_Out(matrix);*/
+
+  /*          Console.WriteLine("\nmatrix_1 + matrix_2 = matrix_3:\n");
+            ServiceFunction.Array_Console_Out(Matrix_summ(matrix, matrix_2));
+
+            Console.WriteLine("\nmatrix_1 * matrix_2 = matrix_4:\n");
+            ServiceFunction.Array_Console_Out(Matrix_mult(matrix, matrix_2));*/
+
+            double[,] Matrix_koef_multiply_get_koef(double[,] matrix)
+            {
+                Console.Write("\nEnter koef -> ");
+                double koef = ServiceFunction.Get_Double();
+               Console.WriteLine("\nmatrix_1 * koef[" + koef + "] = matrix_2:\n");
+                return Matrix_koef_multiply(matrix, koef);
+            }
+            double[,] Matrix_koef_multiply(double[,] matrix, double koef)
+            {
+                double[,] tmp_matrix = new double[matrix.GetLength(0), matrix.GetLength(1)];
+                for (int i = 0; i <= matrix.GetUpperBound(0); i++)
+                {
+                    for (int ii = 0; ii <= matrix.GetUpperBound(1); ii++)
+                        tmp_matrix[i, ii] = matrix[i, ii] * koef;
+                }
+                return tmp_matrix;
+            }
+            double [,] Matrix_summ(double[,] matrix_1, double[,] matrix_2)
+            {
+                if (matrix_1.GetLength(0) != matrix_2.GetLength(0) || matrix_1.GetLength(1) != matrix_2.GetLength(1))
+                    throw new Exception("\nMatrix not equal. Cannot summ\n");
+
+                double[,] matrix_tmp = new double[matrix_1.GetLength(0), matrix_1.GetLength(1)];
+
+                for (int i=0; i< matrix_tmp.GetLength(0); i++)
+                {
+                    for (int ii = 0; ii < matrix_tmp.GetLength(1);ii++)
+                        matrix_tmp[i, ii] = matrix_1[i,ii] + matrix_2[i, ii];
+                }
+                return matrix_tmp;
+            }
+            double[,] Matrix_mult(double[,] matrix_1, double[,] matrix_2)
+            {
+                if (matrix_1.GetLength(1) != matrix_2.GetLength(0))
+                    throw new Exception("\nmatrix_1 columns not equal matrix_2 rows. Cannot multiply\n");
+
+                double[,] matrix_tmp = new double[matrix_1.GetLength(0), matrix_2.GetLength(1)];
+
+                for (int i = 0; i < matrix_1.GetLength(0); i++)
+                {
+                    for (int ii = 0; ii < matrix_2.GetLength(1); ii++)
+                    {
+                        matrix_tmp[i, ii] = 0;
+                        for (int iii = 0; iii < matrix_1.GetLength(1); iii++)
+                            matrix_tmp[i, ii] += matrix_1[i, iii] * matrix_2[iii, ii];
+                    }
+                }
+                return matrix_tmp;
+            }
+
         }
         public static void Task_5(string work_name)
-        /*  Пользователь вводит с клавиатуры дату.Приложе-
-        ние должно отобразить название сезона и дня недели.
-        Например, если введено 22.12.2021, приложение должно
-        отобразить Winter Wednesday.
+        /*  Пользователь с клавиатуры вводит в строку ариф-
+        метическое выражение. Приложение должно посчитать
+        его результат. Необходимо поддерживать только две
+        операции: + и –.
         */
         {
-            Console.Write(work_name + "\n" + "\nEnter date -> ");
+            Console.Write(work_name + "\n");
 
-            string? user_input = Console.ReadLine();
-
-            // Вариант 1 - свой self-made parcing
-            char[] splitters = { '.', '/', '\\', '|', '-', ',' };
-            string[] user_input_arr = user_input.Split(splitters);
-            int[] int_arr = new int[user_input_arr.Length];
-            for (int index = 0; index < int_arr.Length; index++)
-                int_arr[index] = Convert.ToInt32(user_input_arr[index]);
-
-            try
+            Console.Write("Enter an arithmetic statement (operand_1 +/- operand_2):\n");
+            string user_input = Console.ReadLine();
+            char[] parcers = new char[]{ '-', '+' };
+            int parcer_index = user_input.IndexOfAny(parcers);
+            if (parcer_index == -1) { throw new Exception("\nNo supported arithmetic operation found"); }
+            Double.TryParse(user_input.Substring(0, parcer_index), out double operand_1);
+            Double.TryParse(user_input.Substring(parcer_index+1), out double operand_2);
+            Console.Write("\nresult -> ");
+            switch (user_input[parcer_index]) 
             {
-                DateTime user_date_1 = new DateTime(Convert.ToInt32(int_arr[0]), int_arr[1], int_arr[2]);
-                Console.WriteLine("\n* self-made parsing:" +
-                 "\nRead date as -> " + user_date_1 +
-                 "\nSeason -> " + Season(user_date_1) +
-                 "\nDay -> " + user_date_1.DayOfWeek);
+                case '-': Console.WriteLine(operand_1 +" - "+ operand_2+" = "+ (operand_1- operand_2)); break;
+                case '+': Console.WriteLine(operand_1 + " + " + operand_2 + " = " + (operand_1 + operand_2)); break;
             }
-            // если не удастся напарсить хотя бы 3 значения будет OutofRange
-            // catch (IndexOutOfRangeException || ArgumentOutOfRangeException)
-            catch (Exception)
-
-            {
-                Console.WriteLine("\nself-made parcing error");
-            }
-
-            // Вариант 2 - встройка DateTime built-in parsing
-            try
-            {
-                DateTime user_date_2 = DateTime.Parse(user_input, System.Globalization.CultureInfo.InvariantCulture);
-                Console.WriteLine("\n* DateTime built-in parsing:" +
-                "\nRead date as -> " + user_date_2 +
-                "\nSeason -> " + Season(user_date_2) +
-                "\nDay -> " + user_date_2.DayOfWeek);
-            }
-            catch (FormatException)
-            {
-                Console.WriteLine("\nDateTime built-in parsing error");
-            }
-
-            string Season(DateTime date)
-            {
-                switch (Convert.ToInt32(date.Month))
-                {
-                    case 1: case 2: case 12: return "Winter";
-                    case 3: case 4: case 5: return "Spring";
-                    case 6: case 7: case 8: return "Summer";
-                    case 9: case 10: case 11: return "Autumn";
-                    default: return "unknown";
-                }
-            }
-
         }
         public static void Task_6(string work_name)
-        /*  Пользователь вводит с клавиатуры показания тем-
-        пературы. В зависимости от выбора пользователя про-
-        грамма переводит температуру из Фаренгейта в Цельсий
-        или наоборот.*/
-        {
-            Console.WriteLine(work_name);
-            Console.WriteLine("\nTemperature system: " + temp_system);
-            Console.Write("\nEnter temprature -> ");
-            double? user_temp = ServiceFunction.Get_Double();
-            switch (temp_system)
-            {
-                case Temperature_system.Celcius: user_temp = user_temp + 273.15; break;
-                case Temperature_system.Farenheit: user_temp = ((user_temp) - 32) * 5 / 9 + 273.15; break;
-            }
-            if (user_temp < 0) { throw new Exception("\nAbsolute temperature couldn't be below 0"); }
-
-            Console.Write("\nAvailable temperature systems:\n" +
-                "1. Celcius\n" +
-                "2. Kelvin\n" +
-                "3. Farenheit\n" +
-                "choose -> "
-                );
-            switch (ServiceFunction.Get_Int(1, 3))
-            {
-                case 1: temp_system = Temperature_system.Celcius; break;
-                case 2: temp_system = Temperature_system.Kelvin; break;
-                case 3: temp_system = Temperature_system.Farenheit; break;
-            }
-
-            void Show_Temprature()
-            {
-                Console.Write("\n Temperature is ");
-                switch (temp_system)
-                {
-                    case Temperature_system.Celcius: Console.Write(user_temp - 273.15); break;
-                    case Temperature_system.Farenheit: Console.Write(((user_temp - 273.15) * 9 / 5) + 32); break;
-                    case Temperature_system.Kelvin: Console.Write(user_temp); break;
-
-                }
-                Console.WriteLine(temp_system);
-            }
-            Show_Temprature();
-        }
-
-        private enum Temperature_system { Celcius, Kelvin, Farenheit };
-        static Temperature_system temp_system = Temperature_system.Celcius;
-        public static void Task_7(string work_name)
-        /*  Пользователь вводит с клавиатуры два числа. Нужно
-        показать все четные числа в указанном диапазоне. Если
-        границы диапазона указаны неправильно требуется про-
-        извести нормализацию границ. Например, пользователь
-        ввел 20 и 11, требуется нормализация, после которой
-        начало диапазона станет равно 11, а конец 20.
+        /*  Пользователь с клавиатуры вводит некоторый текст.
+        Приложение должно изменять регистр первой буквы
+        каждого предложения на букву в верхнем регистре..
+        Например, если пользователь ввёл: «today is a good
+        day for walking. i will try to walk near the sea».
+        Результат работы приложения: «Today is a good day
+        for walking. I will try to walk near the sea».
         */
         {
-            Console.WriteLine(work_name);
-            Console.Write("\nEnter range bound 1 -> ");
-            int range_1 = ServiceFunction.Get_Int();
-            Console.Write("\nEnter range bound 2 -> ");
-            int range_2 = ServiceFunction.Get_Int();
-            if (range_1 > range_2) ServiceFunction.swap(ref range_1, ref range_2);
-            Console.WriteLine("\nEven numbers in range [" + range_1 + ".." + range_2 + "]:");
-            for (int i = range_1; i <= range_2; i++)
-            {
-                if (i % 2 == 0) { Console.Write(i + " | "); }
+            Console.WriteLine(work_name+"\n");
+            Console.WriteLine("Enter a text (or press F1 to load default):\n");
+            string user_text;
+            ConsoleKey pressed_key = Console.ReadKey().Key;
+            if (pressed_key == ConsoleKey.F1) 
+            { 
+                user_text = "«today is a good day for walking. i will try to walk near the sea»."; 
+                Console.WriteLine(user_text);
             }
+            else user_text = Convert.ToString(pressed_key) + Console.ReadLine();
+            if (string.IsNullOrEmpty(user_text)) { throw new Exception("Error: NULL string"); }
+
+            char[] chars = user_text.ToCharArray();
+            bool make_next_letter_capital_flag = true;
+            for (int i = 0; i< chars.Length; i++)
+            {
+                if (make_next_letter_capital_flag && Char.IsLetter(chars[i]))
+                {
+                    chars[i] = Char.ToUpper(chars[i]);
+                    make_next_letter_capital_flag = false;
+                }
+                if (chars[i] == '.') 
+                    make_next_letter_capital_flag = true;
+            }
+
+            Console.WriteLine("\nresult:\n");
+            Console.WriteLine(chars);
+        }
+        public static void Task_7(string work_name)
+        /*  Создайте приложение, проверяющее текст на недо-
+        пустимые слова. Если недопустимое слово найдено, оно
+        должно быть заменено на набор символов *. По итогам
+        работы приложения необходимо показать статистику
+        действий.
+
+        Например, если и у нас есть такой текст:
+        To be, or not to be, that is the question,
+        Whether 'tis nobler in the mind to suffer
+        The slings and arrows of outrageous fortune
+        Or to take arms against a sea of troubles,
+        And by opposing end them? To die: to sleep;
+        No more; and by a sleep to say we end
+        The heart-ache and the thousand natural shocks
+        That flesh is heir to? 'tis a consumation
+        Devoutly to be wish'd. To die, to sleep
+
+        Недопустимое слово: die.
+
+        Результат работы:
+        To be, or not to be, that is the question,
+         Whether 'tis nobler in the mind to suffer
+        The slings and arrows of outrageous fortune
+        Or to take arms against a sea of troubles,
+        And by opposing end them? To ***: to sleep;
+        No more; and by a sleep to say we end
+        The heart-ache and the thousand natural shocks
+        That flesh is heir to? 'tis a consumation
+        Devoutly to be wish'd. To ***, to sleep.
+        Статистика: 2 замены слова die.
+        */
+        {
+            Console.WriteLine(work_name + "\n");
+            Console.WriteLine("Enter a text (or press F1 to load default):\n");
+            string user_text;
+            ConsoleKey pressed_key = Console.ReadKey().Key;
+            if (pressed_key == ConsoleKey.F1)
+            {
+                user_text = "        To be, or not to be, that is the question,\r\n        " +
+                    "Whether 'tis nobler in the mind to suffer\r\n        " +
+                    "The slings and arrows of outrageous fortune\r\n        " +
+                    "Or to take arms against a sea of troubles,\r\n        " +
+                    "And by opposing end them? To die: to sleep;\r\n        " +
+                    "No more; and by a sleep to say we end\r\n        " +
+                    "The heart-ache and the thousand natural shocks\r\n        " +
+                    "That flesh is heir to? 'tis a consumation\r\n        " +
+                    "Devoutly to be wish'd. To die, to sleep";
+                Console.WriteLine(user_text);
+            }
+            else user_text = Convert.ToString(pressed_key) + Console.ReadLine();
+            if (string.IsNullOrEmpty(user_text)) { throw new Exception("Error: NULL string"); }
+
+            Console.Write("\nEnter a forbidden word : ");
+            string forbidden_word = Console.ReadLine();
+            if (string.IsNullOrEmpty(forbidden_word)) { throw new Exception("Error: NULL string"); }
+
+            
+            char[] replace_with_string = new char[forbidden_word.Length];
+            for (int i = 0; i < replace_with_string.Length; i++)
+                replace_with_string[i] = '*';
+
+            int appearance = Regex.Matches(user_text, forbidden_word).Count();
+
+            string result =  user_text.Replace(forbidden_word, new string(replace_with_string), true, System.Globalization.CultureInfo.CurrentCulture);
+
+            Console.WriteLine("\nresult:\n" + result);
+            Console.WriteLine("\nstatistics: made "+appearance+" changes of word " + forbidden_word);
+
+
         }
 
     }// class Program

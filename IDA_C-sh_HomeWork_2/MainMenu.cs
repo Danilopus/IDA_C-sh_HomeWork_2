@@ -12,12 +12,12 @@ namespace MainMenu
             { "HomeWork 01 : [Arrays & strings]",
               "Task_1: DIM & 2-DIM Arrays",
 
-              "Task_2: Percentage",
-              "Task_3: 4_Digits_to_Number",
-              "Task_4: Change digits in 6-digits number",
-              "Task_5: Date view transform",
-              "Task_6: Temprature view transform: F/C",
-              "Task_7: Even numbers in range"
+              "Task_2: Summ of all elements of array between MIN and MAX",
+              "Task_3: Ceaser crypt",
+              "Task_4: Matrix operations app",
+              "Task_5: Arithmetic statements from string",
+              "Task_6: Fix capital letters in a sentences in a text",
+              "Task_7: Forbidden word in text"
             };
 
         public void AddElement(string menu_element) { _menu_elements.Add(menu_element); }
